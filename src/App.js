@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+// import logo from "./logo.svg";
+import "./App.css";
+import Data from "./Data";
 
-function App() {
+const App = () => {
+  const url = "https://jsonplaceholder.typicode.com/posts";
+
+  const [showData, setShowData] = useState([]);
+
+  const loadData = () => {
+    fetch(url, {
+       method: "GET",
+    }).then((res) => res.json())
+      .then((result) => {
+        if (result) {
+          setShowData(result);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+useEffect(()=>{
+  loadData(); 
+},[]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h5 className="head">React Accordian</h5>
+      <div className="row">
+
+        {showData.map((item,index)=>
+        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 " key={index}>
+            <Data {...item} />
+        </div>
+      )}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
